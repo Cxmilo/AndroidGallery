@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System.Collections.Generic;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -6,13 +7,25 @@ using UnityEngine.UI;
 
 public class GalleryController : MonoBehaviour
 {
+    public static GalleryController instance;
+
     public GameObject buttonPrefab;
 
     public Sprite[] gallerySprite;
 
+    public RectTransform fullIcon_1;
+    public RectTransform fullIcon_2;
+    public RectTransform fullIcon_3;
+
     public RectTransform scrollContainer_1;
     public RectTransform scrollContainer_2;
     public RectTransform scrollContainer_3;
+
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Use this for initialization
     private void Start()
@@ -26,26 +39,38 @@ public class GalleryController : MonoBehaviour
 
         for (int i = 0; i < itemsPerContainer; i++)
         {
-            Image newButton = Instantiate(buttonPrefab, spawnPoints_1[i].position,Quaternion.identity, scrollContainer_1).GetComponentsInChildren<Image>()[1];
+            Image newButton = Instantiate(buttonPrefab, spawnPoints_1[i].position, Quaternion.identity, scrollContainer_1).GetComponent<Image>();
             newButton.sprite = gallerySprite[i];
+            newButton.GetComponent<ButtonController>().zoomOutParent = fullIcon_1;
+
         }
 
         for (int i = 0; i < itemsPerContainer; i++)
         {
-            Image newButton = Instantiate(buttonPrefab, spawnPoints_3[i].position,Quaternion.identity, scrollContainer_3).GetComponentsInChildren<Image>()[1];
+            Image newButton = Instantiate(buttonPrefab, spawnPoints_3[i].position, Quaternion.identity, scrollContainer_3).GetComponent<Image>();
             newButton.sprite = gallerySprite[i + itemsPerContainer];
+            newButton.GetComponent<ButtonController>().zoomOutParent = fullIcon_3;
+
         }
 
         for (int i = 0; i < itemsPerContainer + lastColumItems; i++)
         {
-            Image newButton = Instantiate(buttonPrefab, spawnPoints_2[i].position, Quaternion.identity, scrollContainer_2).GetComponentsInChildren<Image>()[1];
+            Image newButton = Instantiate(buttonPrefab, spawnPoints_2[i].position, Quaternion.identity, scrollContainer_2).GetComponent<Image>();
             newButton.sprite = gallerySprite[i + (itemsPerContainer * 2)];
+            newButton.GetComponent<ButtonController>().zoomOutParent = fullIcon_2;
+
         }
     }
 
-    // Update is called once per frame
-    private void Update()
+    public void ZoomOutCollumElements(Transform colum, ButtonController newBtn)
     {
+        ButtonController zoomIned = colum.GetComponentsInChildren<ButtonController>().
+                                    Where(b => b.currentState == ButtonState.Opened && b != newBtn).FirstOrDefault();
+
+        if(zoomIned)
+        {
+            zoomIned.ZoomOut();
+        }
 
     }
 
