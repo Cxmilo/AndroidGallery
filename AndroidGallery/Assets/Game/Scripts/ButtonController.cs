@@ -2,6 +2,8 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Collections;
 
 public enum ButtonState
 {
@@ -24,7 +26,7 @@ public class ButtonController : MonoBehaviour
     private void Start()
     {
         parent = transform.parent;
-        floatStrength = UnityEngine.Random.Range(0.1f, 1f) * floatStrength;
+        floatStrength = UnityEngine.Random.Range(0.5f, 1f) * floatStrength;
         this.originalY = this.transform.position.y;
         this.originalX = this.transform.position.x;
 
@@ -69,7 +71,7 @@ public class ButtonController : MonoBehaviour
         GetComponent<RectTransform>().DOMove(newPos, 0.5f);
         GetComponent<RectTransform>().DOScale(Vector3.one, 0.5f).OnComplete(delegate { GetComponent<Button>().enabled = true;
             currentState = ButtonState.idle;
-           
+            inactivityTime = false;
         });
     }
 
@@ -83,10 +85,22 @@ public class ButtonController : MonoBehaviour
                 break;
 
             case ButtonState.Opened:
+                if (!inactivityTime)
+                {
+                    StartCoroutine(InactivityTime()); 
+                }
                 break;
 
             default:
                 break;
         }
+    }
+
+    bool inactivityTime = false;
+    IEnumerator InactivityTime ()
+    {
+        inactivityTime = true;
+        yield return new WaitForSeconds(15);
+        ZoomOut();
     }
 }

@@ -30,9 +30,9 @@ public class GalleryController : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        var spawnPoints_1 = scrollContainer_1.GetComponentsInChildren<RectTransform>().Where(c => c != scrollContainer_1).OrderBy(a => Guid.NewGuid()).ToArray();
-        var spawnPoints_2 = scrollContainer_2.GetComponentsInChildren<RectTransform>().Where(c => c != scrollContainer_2).OrderBy(a => Guid.NewGuid()).ToArray();
-        var spawnPoints_3 = scrollContainer_3.GetComponentsInChildren<RectTransform>().Where(c => c != scrollContainer_3).OrderBy(a => Guid.NewGuid()).ToArray();
+        var spawnPoints_1 = scrollContainer_1.GetComponentsInChildren<RectTransform>().Where(s => s != scrollContainer_1).ToArray();
+        var spawnPoints_2 = scrollContainer_2.GetComponentsInChildren<RectTransform>().Where(s => s != scrollContainer_2).ToArray();
+        var spawnPoints_3 = scrollContainer_3.GetComponentsInChildren<RectTransform>().Where(s => s != scrollContainer_3).ToArray();
 
         int itemsPerContainer = gallerySprite.Length / 3;
         int lastColumItems = gallerySprite.Length % 3;
@@ -48,7 +48,7 @@ public class GalleryController : MonoBehaviour
         for (int i = 0; i < itemsPerContainer; i++)
         {
             Image newButton = Instantiate(buttonPrefab, spawnPoints_3[i].position, Quaternion.identity, scrollContainer_3).GetComponent<Image>();
-            newButton.sprite = gallerySprite[i + itemsPerContainer];
+            newButton.sprite = gallerySprite[i +( itemsPerContainer + lastColumItems + 3)];
             newButton.GetComponent<ButtonController>().zoomOutParent = fullIcon_3;
 
         }
@@ -56,7 +56,7 @@ public class GalleryController : MonoBehaviour
         for (int i = 0; i < itemsPerContainer + lastColumItems; i++)
         {
             Image newButton = Instantiate(buttonPrefab, spawnPoints_2[i].position, Quaternion.identity, scrollContainer_2).GetComponent<Image>();
-            newButton.sprite = gallerySprite[i + (itemsPerContainer * 2)];
+            newButton.sprite = gallerySprite[i + itemsPerContainer];
             newButton.GetComponent<ButtonController>().zoomOutParent = fullIcon_2;
 
         }
