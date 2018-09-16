@@ -12,6 +12,7 @@ public class GalleryController : MonoBehaviour
     public GameObject buttonPrefab;
 
     public Sprite[] gallerySprite;
+    public Sprite[] footerSprites;
 
     public RectTransform fullIcon_1;
     public RectTransform fullIcon_2;
@@ -41,24 +42,30 @@ public class GalleryController : MonoBehaviour
         {
             Image newButton = Instantiate(buttonPrefab, spawnPoints_1[i].position, Quaternion.identity, scrollContainer_1).GetComponent<Image>();
             newButton.sprite = gallerySprite[i];
+            newButton.GetComponentsInChildren<Image>()[1].sprite = footerSprites[i];
             newButton.GetComponent<ButtonController>().zoomOutParent = fullIcon_1;
-
+            newButton.SetNativeSize();
+            newButton.GetComponentsInChildren<Image>()[1].SetNativeSize();
         }
 
         for (int i = 0; i < itemsPerContainer; i++)
         {
             Image newButton = Instantiate(buttonPrefab, spawnPoints_3[i].position, Quaternion.identity, scrollContainer_3).GetComponent<Image>();
             newButton.sprite = gallerySprite[i +( itemsPerContainer + lastColumItems + 3)];
+            newButton.GetComponentsInChildren<Image>()[1].sprite = footerSprites[i + (itemsPerContainer + lastColumItems + 3)];
             newButton.GetComponent<ButtonController>().zoomOutParent = fullIcon_3;
-
+            newButton.SetNativeSize();
+            newButton.GetComponentsInChildren<Image>()[1].SetNativeSize();
         }
 
         for (int i = 0; i < itemsPerContainer + lastColumItems; i++)
         {
             Image newButton = Instantiate(buttonPrefab, spawnPoints_2[i].position, Quaternion.identity, scrollContainer_2).GetComponent<Image>();
             newButton.sprite = gallerySprite[i + itemsPerContainer];
+            newButton.GetComponentsInChildren<Image>()[1].sprite = footerSprites[i + itemsPerContainer];
             newButton.GetComponent<ButtonController>().zoomOutParent = fullIcon_2;
-
+            newButton.SetNativeSize();
+            newButton.GetComponentsInChildren<Image>()[1].SetNativeSize();
         }
     }
 

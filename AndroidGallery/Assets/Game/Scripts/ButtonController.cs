@@ -22,9 +22,11 @@ public class ButtonController : MonoBehaviour
 
     public ButtonState currentState;
     private Transform parent;
+    private Transform footer;
 
     private void Start()
     {
+        footer = transform.GetChild(0);
         parent = transform.parent;
         floatStrength = UnityEngine.Random.Range(0.5f, 1f) * floatStrength;
         this.originalY = this.transform.position.y;
@@ -56,9 +58,11 @@ public class ButtonController : MonoBehaviour
         Vector3 newPos = zoomOutParent.position;
         Vector3 scale = zoomOutParent.localScale;
         GetComponent<RectTransform>().DOMove(newPos, 0.5f);
-        GetComponent<RectTransform>().DOScale(scale, 0.5f).OnComplete(delegate { GetComponent<Button>().enabled = true; });
+        GetComponent<RectTransform>().DOScale(scale, 0.5f).OnComplete(delegate { GetComponent<Button>().enabled = true; footer.DOScaleY(1, 0.5f); });
+        
         GetComponent<Button>().enabled = false;
         transform.SetAsLastSibling();
+        transform.parent.SetAsLastSibling();
         GalleryController.instance.ZoomOutCollumElements(parent,this);
         
     }
@@ -69,9 +73,11 @@ public class ButtonController : MonoBehaviour
         GetComponent<Button>().enabled = false;
         Vector3 newPos = new Vector3(originalX, originalY, transform.position.z);
         GetComponent<RectTransform>().DOMove(newPos, 0.5f);
-        GetComponent<RectTransform>().DOScale(Vector3.one, 0.5f).OnComplete(delegate { GetComponent<Button>().enabled = true;
+        footer.DOScaleY(0, 0.5f);
+        GetComponent<RectTransform>().DOScale(0.4f, 0.5f).OnComplete(delegate { GetComponent<Button>().enabled = true;
             currentState = ButtonState.idle;
             inactivityTime = false;
+            StopAllCoroutines();
         });
     }
 
